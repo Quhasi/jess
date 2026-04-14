@@ -1,21 +1,15 @@
 {
-  "name": "pregnancy-app-backend",
+  "name": "littlenest-mobile-app",
   "version": "1.0.0",
-  "description": "Backend API for pregnancy app",
-  "main": "server.js",
+  "description": "Mobile frontend for Little Nest",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
-  
+    "build": "echo 'Success: www folder is ready for packaging'",
+    "sync": "npx cap sync"
   },
   "dependencies": {
-    "@capacitor/cli": "^8.3.0",
-    "@capacitor/core": "^8.3.0",
-    "bcryptjs": "^2.4.3",
-    "cors": "^2.8.6",
-    "dotenv": "^16.3.1",
-    "express": "^4.22.1",
-    "jsonwebtoken": "^9.0.2",
-    "sqlite3": "^6.0.1"
+    "@capacitor/android": "^6.2.1",
+    "@capacitor/cli": "^6.0.0",
+    "@capacitor/core": "^6.0.0"
   }
 }

@@ -1,0 +1,9 @@
+{
+  "apps": [
+    {
+      "appId": "com.example.app",
+      "root": "backend",
+      "androidPath": "android"
+    }
+  ]
+}
