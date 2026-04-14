@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pregnancy Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e6f7ff;
+            min-height: 100vh;
+        }
+
+        /* Fixed: Design no longer covers text */
+        .wave {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+            z-index: 0;
+        }
+        .wave path {
+            fill: #fd5ae2;
+        }
+        
+        /* Added: Pushes content below the pink wave area */
+        .main-wrapper {
+            position: relative;
+            z-index: 1;
+            padding-top: 200px; /* Adjust this to move text up or down */
+            padding-bottom: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header-section h2 {
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 2rem;
+        }
+
+        .week-container {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .week-image {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #fd5ae2;
+            margin-bottom: 20px;
+        }
+
+        .week-title {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #8a2be2;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.5;
+            padding: 0 10px;
+        }
+
+        .nav-controls {
+            display: flex;
+            justify-content: space-between;
+            width: 90%;
+            max-width: 400px;
+            margin-top: 25px;
+        }
+
+        .nav-button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            background-color: #fd5ae2;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+        .nav-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Footer Navigation Styles */
+        .icons {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            padding: 12px 0;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 -3px 15px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        .icon-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #8a2be2;
+        }
+          
+        .icon-container img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            margin-bottom: 5px;
+            object-fit: cover;
+            border: 2px solid #8a2be2;
+        }
+        
+        .icon-container span {
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <svg class="wave" viewBox="0 0 1440 320" preserveAspectRatio="none">
+        <path d="M0,256L48,229.3C96,203,192,149,288,122.7C384,96,480,96,576,117.3C672,139,768,181,864,192C960,203,1056,181,1152,170.7C1248,160,1344,160,1392,160L1440,160L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+    </svg>
+
+    <div class="main-wrapper">
+        <div class="header-section">
+            <h2>Pregnancy Tracker</h2>
+            <p>Hey Mother😊! See how your baby<br>looks at every week.</p>
+        </div>
+
+        <div id="week-display" class="week-container">
+            </div>
+
+        <div class="nav-controls">
+            <button class="nav-button" id="prev-button">Previous</button>
+            <button class="nav-button" id="next-button">Next Week</button>
+        </div>
+    </div>
+
+    <div class="icons">
+        <a href="new home.html" class="icon-container">
+            <img src="home.jpg" alt="Home">
+            <span>Home</span>
+        </a>
+        <a href="mychatbot.html" class="icon-container">
+            <img src="tracker.jpg" alt="Chatbot">
+            <span>Chatbot</span>
+        </a>
+        <a href="A&R.html" class="icon-container">
+            <img src="Advice.jpg" alt="Advices and Recommendations">
+            <span>Advices and Recommendations</span>
+        </a>
+        <a href="new user profile.html" class="icon-container">
+            <img src="profile.jpg" alt="Profile">
+            <span>Profile</span>
+        </a>
+    </div>
+
+    <script>
+        let currentWeek = 1;
+        const weeks = [
+            { week: 1, image: 'week 1.jpg', description: 'Your baby is a tiny fertilized egg, about the size of a poppy seed.' },
+            { week: 2, image: 'week 2.jpg', description: 'Your baby is a ball of cells called a blastocyst, about the size of a pinhead.' },
+            { week: 3, image: 'week 3.jpg', description: 'Your baby is implanting in your uterus, about the size of a sesame seed.' },
+            { week: 4, image: 'week 4.jpg', description: 'Your baby is developing major organs, about the size of a grain of rice.' },
+            { week: 5, image: 'week 5.jpg', description: 'The heart and circulatory system are starting to form.' },
+            { week: 6, image: 'week 6.jpg', description: 'The nose, mouth, and ears are beginning to take shape.' },
+            { week: 7, image: 'week 7.jpg', description: 'Your baby is developing tiny hands and feet. They are the size of a blueberry.' }, // Fixed space in filename
+            { week: 8, image: 'week 8.jpg', description: 'The baby is now a fetus and has distinct facial features.' },
+            { week: 9, image: 'week 9.jpg', description: 'Your baby is now about the size of a grape.' }, // Fixed filename consistency
+            { week: 10, image: 'week 10.jpg', description: 'The vital organs are starting to function together.' },
+            { week: 40, image: 'week 40.jpg', description: 'Your baby is fully developed and ready to meet you!' }
+        ];
+
+        // Fill in missing weeks for testing if images exist
+        for(let i=11; i<=39; i++) {
+            weeks.splice(i-1, 0, { week: i, image: `week ${i}.jpg`, description: `Your baby is growing and getting stronger every day in week ${i}.` });
+        }
+
+        const weekDisplay = document.getElementById('week-display');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+
+        function updateWeek() {
+            const current = weeks.find((w) => w.week === currentWeek);
+            if (current) {
+                weekDisplay.innerHTML = `
+                    <img src="${current.image}" class="week-image" alt="Week ${current.week}" onerror="this.src='placeholder.jpg'">
+                    <div class="week-title">Week ${current.week}</div>
+                    <div class="description">${current.description}</div>
+                `;
+            }
+            
+            prevButton.disabled = currentWeek === 1;
+            nextButton.disabled = currentWeek === weeks.length;
+        }
+
+        prevButton.addEventListener('click', () => {
+            if(currentWeek > 1) {
+                currentWeek--;
+                updateWeek();
+            }
+        });
+
+        nextButton.addEventListener('click', () => {
+            if(currentWeek < weeks.length) {
+                currentWeek++;
+                updateWeek();
+            }
+        });
+
+        updateWeek();
+    </script>
+</body>
+</html>

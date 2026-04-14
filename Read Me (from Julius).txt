@@ -1,0 +1,18 @@
+COPY AND PASTE THIS COMMANDS ( TERMINAL )
+
+1. npm install  (to install all features)
+2. npm install sqlite3
+3. cd backend   (this command tells VScode to run your program from your backend)
+4. node server.js  (this runs the code)
+
+THINGS TO KNOW ABOUT 
+
+I use SQLite for your database because when you use mongoose that means you need to run "mongoose" before you database responds.
+Make sure you sign up before you login. After signing up you can access it without signing up again.
+After the program runs successfully press CTRL + CLICK on "http://localhost:3000" to view you program.
+
+
+
+
+DELETE THIS FILE BEFORE YOU SUBMIT YOU WORK!!
+THANK YOU!👌

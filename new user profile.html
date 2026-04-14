@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pregnancy Profile</title>
+    <style>
+        body { background: #fdf6ff; font-family: Arial, sans-serif; margin: 0; padding-bottom: 100px; }
+        .profile-container { width: 92%; max-width: 450px; margin: 20px auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); text-align: center; }
+        .profile-header { background: #fd5ae2; padding: 20px; border-radius: 15px; color: white; margin-bottom: 20px; }
+        .profile-card { background: #fff; border-left: 6px solid #fd5ae2; padding: 15px; border-radius: 12px; margin-bottom: 15px; text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        label { display: block; margin-top: 15px; font-weight: bold; color: #444; text-align: left; }
+        input, select { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
+        .save-btn { background: #fd5ae2; color: white; width: 100%; padding: 15px; border: none; border-radius: 30px; font-weight: bold; cursor: pointer; margin-top: 25px; }
+        .navbar { position: fixed; bottom: 0; width: 100%; background: white; padding: 10px; display: flex; justify-content: space-around; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
+        .nav-item { text-decoration: none; color: #8a2be2; font-size: 12px; display: flex; flex-direction: column; align-items: center; }
+        .nav-item img { width: 30px; height: 30px; margin-bottom: 4px; border-radius: 50%; }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-header">
+            <h2 style="margin:0;">Pregnancy Profile</h2>
+            <button onclick="document.getElementById('form-area').style.display='block'" style="margin-top:10px; cursor:pointer; background:white; border:none; padding:8px 15px; border-radius:20px; color:#fd5ae2; font-weight:bold;">+ Add Details</button>
+        </div>
+
+        <div id="profiles-list">Loading your journey...</div>
+
+        <div id="form-area" style="display:none; border-top: 2px solid #f9f0ff; margin-top:20px; padding-top:20px;">
+            <form id="profile-form">
+                <label for="weeks">Weeks Pregnant</label>
+                <input type="number" id="weeks">
+                <label for="due-date">Due Date</label>
+                <input type="date" id="due-date">
+                <label for="baby-name">Baby's Name</label>
+                <input type="text" id="baby-name" required>
+                <label for="age">Age</label>
+                <input type="number" id="age">
+                <label for="height">Height (cm)</label>
+                <input type="number" id="height">
+                <label for="weight">Weight (kg)</label>
+                <input type="number" id="weight" step="0.1">
+                <label for="blood-group">Blood Type</label>
+                <select id="blood-group">
+                    <option value="">Select Blood Type</option>
+                    <option value="A+">A+</option><option value="A-">A-</option>
+                    <option value="B+">B+</option><option value="B-">B-</option>
+                    <option value="O+">O+</option><option value="O-">O-</option>
+                    <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                </select>
+                <button type="submit" class="save-btn">Save to Dashboard</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Check both common ways the user ID might be stored
+        const storedUser = localStorage.getItem('currentUser');
+        const storedId = localStorage.getItem('userId');
+
+        let userId = null;
+
+        if (storedUser) {
+            const parsed = JSON.parse(storedUser);
+            userId = parsed.id || parsed.userId;
+        } else if (storedId) {
+            userId = storedId;
+        }
+
+        console.log("Active User ID:", userId);
+
+        async function loadProfiles() {
+            if (!userId) {
+                document.getElementById('profiles-list').innerHTML = "<p style='color:red;'>User not logged in. Please go to Login page.</p>";
+                return;
+            }
+            
+            try {
+                const res = await fetch(`/api/profile/${userId}`);
+                const profiles = await res.json();
+                const list = document.getElementById('profiles-list');
+                list.innerHTML = '';
+
+                if (Array.isArray(profiles) && profiles.length > 0) {
+                    profiles.forEach(p => {
+                        list.innerHTML += `
+                            <div class="profile-card">
+                                <h3 style="margin:0; color:#fd5ae2;">👶 ${p.baby_name}</h3>
+                                <p style="margin:10px 0; color:#555; font-size:0.95rem; line-height:1.6;">
+                                    <b>Pregnancy:</b> ${p.weeks_pregnant} weeks<br>
+                                    <b>Due Date:</b> ${p.due_date}<br>
+                                    <b>Blood Group:</b> ${p.blood_group}<br>
+                                    <b>Weight:</b> ${p.weight}kg | <b>Height:</b> ${p.height}cm
+                                </p>
+                            </div>`;
+                    });
+                } else {
+                    list.innerHTML = "<p style='color:gray;'>No profiles saved yet. Click '+ Add Details' to start.</p>";
+                }
+            } catch (err) {
+                console.error("Error loading profiles:", err);
+                document.getElementById('profiles-list').innerHTML = "Error connecting to server.";
+            }
+        }
+
+        document.getElementById('profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!userId) {
+                return alert("Session missing. Please log in again.");
+            }
+
+            const data = {
+                userId: userId,
+                weeks: document.getElementById('weeks').value,
+                dueDate: document.getElementById('due-date').value,
+                babyName: document.getElementById('baby-name').value,
+                age: document.getElementById('age').value,
+                height: document.getElementById('height').value,
+                weight: document.getElementById('weight').value,
+                bloodGroup: document.getElementById('blood-group').value
+            };
+
+            try {
+                const response = await fetch('/api/profile/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    alert("Profile Saved!");
+                    document.getElementById('profile-form').reset();
+                    document.getElementById('form-area').style.display = 'none';
+                    loadProfiles(); 
+                } else {
+                    const errorData = await response.json();
+                    alert("Error: " + errorData.error);
+                }
+            } catch (err) {
+                alert("Submit Baby's details.");
+            }
+        });
+
+        // Start loading
+        loadProfiles();
+    </script>
+
+    <div class="navbar">
+        <a href="new home.html" class="nav-item"><img src="home.jpg">Home</a>
+        <a href="mychatbot.html" class="nav-item"><img src="Chatbot image.jpg">Chat</a>
+        <a href="new user profile.html" class="nav-item"><img src="profile.jpg">Profile</a>
+    </div>
+</body>
+</html>

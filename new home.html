@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page - Pregnancy App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #f9f0ff 0%, #e6f7ff 100%); min-height: 100vh; }
+        .wave { position: absolute; top: 0; left: 0; width: 100%; height: 40vh; z-index: -1; }
+        .wave path { fill: #fd5ae2; }
+        .header { text-align: center; padding: 40px 20px 20px; position: relative; }
+        .header h1 { color: #8a2be2; font-size: 2.5rem; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .user-info { background: white; padding: 15px 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); display: inline-block; margin-top: 10px; }
+        .user-info span { color: #8a2be2; font-weight: 600; }
+        .content { padding: 40px 20px 100px; text-align: center; max-width: 800px; margin: 0 auto; }
+        .content h2 { color: #8a2be2; font-size: 2rem; margin-bottom: 20px; }
+        .content p { color: #666; font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px; }
+        .profile-image { width: 200px; height: 200px; border-radius: 50%; object-fit: cover; border: 5px solid white; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); margin: 20px auto; }
+        .icons { position: fixed; bottom: 0; left: 0; width: 100%; background: white; padding: 15px 20px; display: flex; justify-content: space-around; box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1); z-index: 1000; }
+        .icon-container { display: flex; flex-direction: column; align-items: center; text-decoration: none; transition: transform 0.3s; }
+        .icon-container:hover { transform: translateY(-5px); }
+        .icon-container img { width: 50px; height: 50px; border-radius: 50%; margin-bottom: 8px; object-fit: cover; border: 2px solid #8a2be2; padding: 3px; }
+        .icon-container span { color: #8a2be2; font-size: 0.85rem; font-weight: 600; }
+        .logout-btn { position: absolute; top: 30px; right: 30px; background: linear-gradient(135deg, #8a2be2 0%, #fd5ae2 100%); color: white; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; z-index: 10; }
+        .logout-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center; }
+        .logout-modal-content { background: white; padding: 30px; border-radius: 15px; text-align: center; max-width: 400px; width: 90%; }
+        .logout-modal-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 20px; }
+        .logout-modal-btn { padding: 10px 25px; border: none; border-radius: 25px; font-weight: 600; cursor: pointer; }
+        .logout-modal-btn.cancel { background: #f0f0f0; }
+        .logout-modal-btn.confirm { background: linear-gradient(135deg, #8a2be2 0%, #fd5ae2 100%); color: white; }
+        .welcome-section { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body>
+    <svg class="wave" viewBox="0 0 1440 320" preserveAspectRatio="none"><path d="M0,256L48,229.3C96,203,192,149,288,122.7C384,96,480,96,576,117.3C672,139,768,181,864,192C960,203,1056,181,1152,170.7C1248,160,1344,160,1392,160L1440,160L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>
+    
+    <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    
+    <div class="logout-modal" id="logoutModal">
+        <div class="logout-modal-content">
+            <h3>Logout</h3>
+            <p>Are you sure you want to logout?</p>
+            <div class="logout-modal-buttons">
+                <button class="logout-modal-btn cancel" id="cancelLogout">Cancel</button>
+                <button class="logout-modal-btn confirm" id="confirmLogout">Yes, Logout</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="header">
+        <h1><i class="fas fa-baby"></i> Pregnancy App</h1>
+        <div class="user-info"><span id="welcomeName">Hello!</span></div>
+    </div>
+    
+    <div class="content">
+        <div class="welcome-section">
+            <h2 id="personalGreeting">Welcome!</h2>
+            <p>To your trusted companion, supporting you through every stage of your pregnancy with care, guidance, and everything you need for a healthy and happy journey.</p>
+            <img src="home.jpg" alt="Pregnancy" class="profile-image">
+        </div>
+    </div>
+    
+    <div class="icons">
+        <a href="new tracker.html" class="icon-container"><img src="tracker.jpg"><span>Fetus Tracker</span></a>
+        <a href="./mychatbot.html" class="icon-container"><img src="Chatbot image.jpg"><span>Chatbot</span></a>
+        <a href="A&R.html" class="icon-container"><img src="Advice.jpg"><span>Advices and Recommendations</span></a>
+        <a href="new user profile.html" class="icon-container"><img src="profile.jpg"><span>Profile</span></a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get data from both possible locations
+            const userData = localStorage.getItem('currentUser');
+            const savedName = localStorage.getItem('username');
+            
+            let nameToUse = "";
+
+            if (userData) {
+                const user = JSON.parse(userData);
+                // Check every possible name field
+                nameToUse = user.username || user.name || savedName || "User";
+            } else if (savedName) {
+                nameToUse = savedName;
+            } else {
+                window.location.href = 'Login.html';
+                return;
+            }
+
+            // Update the UI
+            document.getElementById('welcomeName').textContent = `Hello, ${nameToUse}!`;
+            document.getElementById('personalGreeting').textContent = `Welcome, ${nameToUse}!`;
+
+            // Logout logic
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                document.getElementById('logoutModal').style.display = 'flex';
+            });
+            document.getElementById('cancelLogout').addEventListener('click', () => {
+                document.getElementById('logoutModal').style.display = 'none';
+            });
+            document.getElementById('confirmLogout').addEventListener('click', () => {
+                localStorage.clear();
+                window.location.href = 'Login.html';
+            });
+        });
+    </script>
+</body>
+</html>
